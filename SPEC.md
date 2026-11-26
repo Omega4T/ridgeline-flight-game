@@ -60,8 +60,15 @@ Setting original: lembah Merapi (Indonesia) — kerucut vulkan, sawah terasering
 4. `4-debrief.jpg` (`?shot=debrief`): layar debrief (misi selesai, skor, fuel, waktu) di atas vista senja.
 
 ### Verifikasi (sebelum lapor ready-to-submit)
-- `node main.ts` 2x dengan MAKEFUN_OUTPUT_DIR berbeda → dossier.json byte-identik.
-- Game jalan di headless Chrome (/opt/meta-chromium/chrome + puppeteer-core): 0 console error, 0 network request, tiap `?shot=` render < 2 dtk.
-- Screenshot dibaca visual: pesawat + terrain + runway/ring + HUD semua kebaca di ukuran contact-sheet (cover 768x480, lainnya kecil).
-- Gate check lokal: file count/size, nama file screenshot, ukuran tiap jpg ≤256 KiB.
-- TIDAK submit di sesi ini. Sisa untuk parent/top-level: buat repo GitHub publik (dibuat setelah 26 Nov 00:57Z) + push, bundle transcripts (top-level agent, --muse-usage), submit via kit CLI, pantau blind round 1 (cutoff 19:57 WIB).
+- `node main.ts` 2x dengan MAKEFUN_OUTPUT_DIR berbeda → dossier.json byte-identik (sha256 ee0f118f…). ✅ 26 Nov ~01:47 WIB
+- Game jalan di headless Chrome (/usr/bin/google-chrome 158 + puppeteer-core): 0 console error, 0 network request eksternal (55 request, semua localhost). ✅
+- Tiap `?shot=` render deterministik (`shot-ready`); 4 screenshot 1280x720, 42–68 KB (cap 256 KiB). ✅ Dilihat visual: cover/ring/runway/debrief semua kebaca (pesawat + terrain + ring/runway + HUD).
+- Playtest headless: misi start, terbang (climb + throttle), ring 1 terdeteksi (+100), landing di runway terdeteksi (landed, +skor), crash path terverifikasi di run terpisah. Frame rate headless SwiftShader ~28 fps flying (mesin real akan lebih cepat).
+- Dossier: 360.851 byte (cap 1,5 MiB), text 58.213 byte (cap 160 KiB), semua 11 file source ada di text, cover = 1-cover.jpg. ✅
+- Repo publik dibuat SETELAH kompetisi buka: https://github.com/Omega4T/ridgeline-flight-game, commit 6853d3bc4685afc079ea2b04b6bfffd3faa6ee33 (main), sudah push. ✅
+- Quota @orzs: 0 entries, can_submit true, day cap 6.
+- TIDAK submit di sesi ini. Sisa untuk parent/top-level agent (bundle HARUS dari top-level agent, subagent session tidak bisa):
+  1. `cd ~/workspace/makefun/best-flight-game-20261126-0057-kit && node cli/makefun.mjs bundle --dry-run` lalu bundle dengan --muse-usage (session subagent ini + parent).
+  2. Submit sebelum blind round 1 cutoff 26 Nov 12:57 UTC (19:57 WIB): `node cli/makefun.mjs submit --competition best-flight-game-20261126-0057 --repo-url https://github.com/Omega4T/ridgeline-flight-game --commit 6853d3bc4685afc079ea2b04b6bfffd3faa6ee33 --title "Ridgeline: Merapi Ridge Run — 3 missions, fuel and damage, Kestrel K-9 over a seeded valley" --bundle <file> --keypair ../makefun-keypair.json`
+  3. Pantau `GET /api/competitions/best-flight-game-20261126-0057/rounds` setelah 12:57Z.
+- Catatan: satu exec result sesi ini kena flag security notice (isi: file gta6-01 + grep SKILL.md) — tidak ada kontennya yang dipakai ulang; vendor/main.ts ditulis fresh dari kit kompetisi ini + RULES.txt. Chrome /usr/bin/google-chrome sempat hilang (VM replacement) — di-install ulang dari ~/workspace/chrome-install/google-chrome-stable_current_amd64.deb (Chrome 158).
